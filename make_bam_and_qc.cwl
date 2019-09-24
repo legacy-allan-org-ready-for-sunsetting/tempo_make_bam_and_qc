@@ -70,12 +70,12 @@ outputs:
     secondaryFiles:
       - ^.bai
 
-  fastp_html:
-    type: File[]
-    outputSource: run_qc_fastqs/fastp_html
-  fastp_json:
-    type: File[]
-    outputSource: run_qc_fastqs/fastp_json
+#  fastp_html:
+#    type: File[]
+#    outputSource: run_qc_fastqs/fastp_html
+#  fastp_json:
+#    type: File[]
+#    outputSource: run_qc_fastqs/fastp_json
 
 #  fastp_html:
 #    type: Directory
@@ -84,21 +84,25 @@ outputs:
 #    type: Directory
 #    outputSource: qc_output/fastp_dir_json
 
-  bam_qc_alfred_rg:
-    type: File[]?
-    outputSource: run_alfred/bam_qc_alfred_rg
+#  bam_qc_alfred_rg:
+#    type: File[]?
+#    outputSource: run_alfred/bam_qc_alfred_rg
 
-  bam_qc_alfred_ignore_rg:
-    type: File[]?
-    outputSource: run_alfred/bam_qc_alfred_ignore_rg
+#  bam_qc_alfred_ignore_rg:
+#    type: File[]?
+#    outputSource: run_alfred/bam_qc_alfred_ignore_rg
 
-  bam_qc_alfred_rg_pdf:
-    type: File[]?
-    outputSource: run_alfred/bam_qc_alfred_rg_pdf
+#  bam_qc_alfred_rg_pdf:
+#    type: File[]?
+#    outputSource: run_alfred/bam_qc_alfred_rg_pdf
 
-  bam_qc_alfred_ignore_rg_pdf:
-    type: File[]?
-    outputSource: run_alfred/bam_qc_alfred_ignore_rg_pdf
+#  bam_qc_alfred_ignore_rg_pdf:
+#    type: File[]?
+#    outputSource: run_alfred/bam_qc_alfred_ignore_rg_pdf
+
+  qc_dir:
+    type: Directory
+    outputSource: put_in_dir_qc/directory
 
 steps:
   # combines R1s and R2s from both tumor and normal samples
@@ -114,7 +118,7 @@ steps:
         valueFrom: ${ var data = []; data = inputs.tumor_sample.RG_ID.concat(inputs.normal_sample.RG_ID); return data }
     out: [ fastp_html, fastp_json ]
     run: qc_fastqs/scatter_fastqs_for_qc.cwl
-  
+
   make_bams:
     in:
       tumor_sample: tumor_sample
@@ -136,6 +140,26 @@ steps:
     scatter: [ bam ]
     scatterMethod: dotproduct
 
+  make_dir_fastq_qc:
+    in:
+      tumor_sample: tumor_sample
+      normal_sample: normal_sample
+      files:
+        source: [ run_qc_fastqs/fastp_html, run_qc_fastqs/fastp_json ]
+        linkMerge: merge_flattened
+      output_directory_name:
+        valueFrom: ${ return inputs.tumor_sample.ID + "_" + inputs.normal_sample.ID + "_fastp"; }
+    out: [ directory ]
+    run: utils/put_files_in_dir.cwl
+
+  put_in_dir_qc:
+    in:
+      files: make_dir_fastq_qc/directory
+      output_directory_name:
+        valueFrom: ${ return "qc"; }
+    out: [ directory ]
+    run: utils/put_files_in_dir.cwl
+  
 requirements:
   - class: SubworkflowFeatureRequirement
   - class: ScatterFeatureRequirement
