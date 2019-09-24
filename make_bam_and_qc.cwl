@@ -58,6 +58,12 @@ inputs:
     secondaryFiles:
       - .tbi
 
+  targets_list:
+    type: File[]?
+
+  baits_list:
+    type: File[]?
+
 outputs:
   tumor_bam:
     type: File
@@ -93,6 +99,19 @@ steps:
     out: [ fastp_html, fastp_json ]
     run: qc_fastqs/scatter_fastqs_for_qc.cwl
 
+  run_collect_hsmetrics:
+    in:
+      reference_sequence: reference_sequence
+      bam:
+        source: [ make_bams/tumor_bam, make_bams/normal_bam ]
+        linkMerge: merge_flattened
+      targets_list: targets_list
+      baits_list: baits_list
+    out: [ hsmetrics ]
+    scatter: [ bam ]
+    scatterMethod: dotproduct
+    run: qc_bams/tempo_collect_hsmetrics.cwl  
+
   make_bams:
     in:
       tumor_sample: tumor_sample
@@ -119,7 +138,7 @@ steps:
       tumor_sample: tumor_sample
       normal_sample: normal_sample
       files:
-        source: [ run_qc_fastqs/fastp_html, run_qc_fastqs/fastp_json ]
+        source: [ run_qc_fastqs/fastp_html, run_qc_fastqs/fastp_json, run_collect_hsmetrics/hsmetrics ]
         linkMerge: merge_flattened
       output_directory_name:
         valueFrom: ${ return "fastqs"; }
