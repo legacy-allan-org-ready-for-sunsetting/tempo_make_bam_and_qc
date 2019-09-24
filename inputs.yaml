@@ -60,4 +60,8 @@
              'secondaryFiles': [ { 'class': 'File',
                                    'path': '/path/to/optional/bed.file.tbi' }
              }
+    'targets_list': [ { 'class': 'File',
+                        'path': '/path/to/optional/targets.interval_list.file'}], #hack; needs array to workaround lack of if-statements. empty array = no execute
+    'baits_list': [ { 'class': 'File',
+                        'path': '/path/to/optional/baits.interval_list.file'}]
 }
