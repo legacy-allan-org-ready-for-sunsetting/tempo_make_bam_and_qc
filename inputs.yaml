@@ -55,13 +55,15 @@
                         'adapter': 'AGATCGGAAGAGCACACGTCTGAACTCCAGTCACATGAGCATCTCGTATGCCGTCTTCTGCTTG',
                         'adapter2': 'AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT',
                         'bwa_output': 'foo_tumor.bam'},
+    # optional; used for WES runs by Alfred
     'target_bed': {'class': 'File',
              'path': '/path/to/optional/bed.file',
              'secondaryFiles': [ { 'class': 'File',
                                    'path': '/path/to/optional/bed.file.tbi' }
-             }
-    'targets_list': [ { 'class': 'File',
-                        'path': '/path/to/optional/targets.interval_list.file'}], #hack; needs array to workaround lack of if-statements. empty array = no execute
-    'baits_list': [ { 'class': 'File',
-                        'path': '/path/to/optional/baits.interval_list.file'}]
+             },
+     # optional; if not provided, hsmetrics will not execute
+    'targets_list': { 'class': 'File', 
+                        'path': '/path/to/optional/targets.interval_list.file'},
+    'baits_list': { 'class': 'File',
+                        'path': '/path/to/optional/baits.interval_list.file'}
 }
