@@ -59,10 +59,10 @@ inputs:
       - .tbi
 
   targets_list:
-    type: File[]?
+    type: File?
 
   baits_list:
-    type: File[]?
+    type: File?
 
 outputs:
   tumor_bam:
@@ -97,20 +97,22 @@ steps:
       output_prefix:
         valueFrom: ${ var data = []; data = inputs.tumor_sample.RG_ID.concat(inputs.normal_sample.RG_ID); return data }
     out: [ fastp_html, fastp_json ]
-    run: qc_fastqs/scatter_fastqs_for_qc.cwl
+    run: tempo_qc/qc_fastqs/scatter_fastqs_for_qc.cwl
 
   run_collect_hsmetrics:
     in:
-      reference_sequence: reference_sequence
-      bam:
+      REFERENCE_SEQUENCE: reference_sequence
+      INPUT:
         source: [ make_bams/tumor_bam, make_bams/normal_bam ]
         linkMerge: merge_flattened
-      targets_list: targets_list
-      baits_list: baits_list
-    out: [ hsmetrics ]
-    scatter: [ bam ]
+      TARGET_INTERVALS: targets_list
+      BAIT_INTERVALS: baits_list
+      OUTPUT:
+        valueFrom: ${ return inputs.INPUT.basename.replace(".bam", "_hsmetrics.txt"); }
+    out: [ out_file ]
+    scatter: [ INPUT ]
     scatterMethod: dotproduct
-    run: qc_bams/tempo_collect_hsmetrics.cwl  
+    run: tempo_qc/qc_wrapper/collect_hs_metrics.cwl
 
   make_bams:
     in:
@@ -129,7 +131,7 @@ steps:
       bed: target_bed
       reference_sequence: reference_sequence
     out: [ bam_qc_alfred_rg, bam_qc_alfred_ignore_rg, bam_qc_alfred_rg_pdf, bam_qc_alfred_ignore_rg_pdf ]
-    run: qc_bams/run_alfred.cwl
+    run: tempo_qc/qc_bams/run_alfred.cwl
     scatter: [ bam ]
     scatterMethod: dotproduct
 
@@ -138,7 +140,7 @@ steps:
       tumor_sample: tumor_sample
       normal_sample: normal_sample
       files:
-        source: [ run_qc_fastqs/fastp_html, run_qc_fastqs/fastp_json, run_collect_hsmetrics/hsmetrics ]
+        source: [ run_qc_fastqs/fastp_html, run_qc_fastqs/fastp_json, run_collect_hsmetrics/out_file ]
         linkMerge: merge_flattened
       output_directory_name:
         valueFrom: ${ return "fastqs"; }
