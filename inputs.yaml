@@ -1,69 +1,60 @@
-{
-    'targets_bed': { 'class': 'File',
-                     'path': '/path/to/optional/file.bed.gz',
-                     'secondaryFiles': [ { 'class': 'File',
-                                           'path':'/path/to/optional/file.bed.gz.tbi'
-                                       } ]
-                   },
-    'known_sites': [   {   'class': 'File',
-                           'path': '/path/to/known_sites.1.vcf',
-                           'secondaryFiles': [   {   'class': 'File',
-                                                     'path': '/path/to/known_sites.1.vcf.idx'}]},
-                       {   'class': 'File',
-                           'path': '/path/to/known_sites.2.vcf',
-                           'secondaryFiles': [   {   'class': 'File',
-                                                     'path': '/path/to/known_sites.2.vcf.idx'}]}],
-    'normal_sample': {   'CN': 'MSKCC',
-                         'ID': 'foo_normal',
-                         'LB': 'foo_normal_1',
-                         'PL': 'Illumina',
-                         'PU': ['foo_normal_1-foo_normal'],
-                         'R1': [   {   'class': 'File',
-                                       'path': '/path/to/R1.fastq.gz'}],
-                         'R2': [   {   'class': 'File',
-                                       'path': '/path/to/R2.fastq.gz'}],
-                         'RG_ID': ['foo_normal_1-foo_normalPE'],
-                         'adapter': 'AGATCGGAAGAGCACACGTCTGAACTCCAGTCACATGAGCATCTCGTATGCCGTCTTCTGCTTG',
-                         'adapter2': 'AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT',
-                         'bwa_output': 'foo_normal.bam'},
-    'reference_sequence': {   'class': 'File',
-                              'path': '/path/to/ref.fasta',
-                              'secondaryFiles': [   {   'class': 'File',
-                                                        'path': '/path/to/ref.fasta.amb'},
-                                                    {   'class': 'File',
-                                                        'path': '/path/to/ref.fasta.ann'},
-                                                    {   'class': 'File',
-                                                        'path': '/path/to/ref.fasta.bwt'},
-                                                    {   'class': 'File',
-                                                        'path': '/path/to/ref.fasta.fai'},
-                                                    {   'class': 'File',
-                                                        'path': '/path/to/ref.fasta.pac'},
-                                                    {   'class': 'File',
-                                                        'path': '/path/to/ref.fasta.sa'},
-                                                    {   'class': 'File',
-                                                        'path': '/path/to/ref.dict'}]},
-    'tumor_sample': {   'CN': 'MSKCC',
-                        'ID': 'foo_tumor',
-                        'LB': 'foo_tumor_1',
-                        'PL': 'Illumina',
-                        'PU': ['foo_tumor_1-foo_tumor'],
-                        'R1': [   {   'class': 'File',
-                                      'path': '/path/to/R1.fastq.gz'}],
-                        'R2': [   {   'class': 'File',
-                                      'path': '/path/to/R2.fastq.gz'}],
-                        'RG_ID': ['foo_tumor_1-foo_tumorPE'],
-                        'adapter': 'AGATCGGAAGAGCACACGTCTGAACTCCAGTCACATGAGCATCTCGTATGCCGTCTTCTGCTTG',
-                        'adapter2': 'AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT',
-                        'bwa_output': 'foo_tumor.bam'},
-    # optional; used for WES runs by Alfred
-    'target_bed': {'class': 'File',
-             'path': '/path/to/optional/bed.file',
-             'secondaryFiles': [ { 'class': 'File',
-                                   'path': '/path/to/optional/bed.file.tbi' }
-             },
-     # optional; if not provided, hsmetrics will not execute
-    'targets_list': { 'class': 'File', 
-                        'path': '/path/to/optional/targets.interval_list.file'},
-    'baits_list': { 'class': 'File',
-                        'path': '/path/to/optional/baits.interval_list.file'}
-}
+baits_list: {class: File, path: /path/to/optional/baits.interval_list.file}
+known_sites:
+   - class: File
+     path: /path/to/known_sites.1.vcf
+     secondaryFiles:
+        - {class: File, path: /path/to/known_sites.1.vcf.idx}
+   - class: File
+     path: /path/to/known_sites.2.vcf
+     secondaryFiles:
+        - {class: File, path: /path/to/known_sites.2.vcf.idx}
+normal_sample:
+     CN: MSKCC
+     ID: foo_normal
+     LB: foo_normal_1
+     PL: Illumina
+     PU: [foo_normal_1-foo_normal]
+     R1:
+        - {class: File, path: /path/to/R1.fastq.gz}
+     R2:
+        - {class: File, path: /path/to/R2.fastq.gz}
+     RG_ID: [foo_normal_1-foo_normalPE]
+     adapter: AGATCGGAAGAGCACACGTCTGAACTCCAGTCACATGAGCATCTCGTATGCCGTCTTCTGCTTG
+     adapter2: AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT
+     bwa_output: foo_normal.bam
+reference_sequence:
+     class: File
+     path: /path/to/ref.fasta
+     secondaryFiles:
+        - {class: File, path: /path/to/ref.fasta.amb}
+        - {class: File, path: /path/to/ref.fasta.ann}
+        - {class: File, path: /path/to/ref.fasta.bwt}
+        - {class: File, path: /path/to/ref.fasta.fai}
+        - {class: File, path: /path/to/ref.fasta.pac}
+        - {class: File, path: /path/to/ref.fasta.sa}
+        - {class: File, path: /path/to/ref.dict}
+target_bed:
+     class: File
+     path: /path/to/optional/bed.file
+     secondaryFiles:
+        - {class: File, path: /path/to/optional/bed.file.tbi}
+targets_bed:
+     class: File
+     path: /path/to/optional/file.bed.gz
+     secondaryFiles:
+        - {class: File, path: /path/to/optional/file.bed.gz.tbi}
+targets_list: {class: File, path: /path/to/optional/targets.interval_list.file}
+tumor_sample:
+     CN: MSKCC
+     ID: foo_tumor
+     LB: foo_tumor_1
+     PL: Illumina
+     PU: [foo_tumor_1-foo_tumor]
+     R1:
+        - {class: File, path: /path/to/R1.fastq.gz}
+     R2:
+        - {class: File, path: /path/to/R2.fastq.gz}
+     RG_ID: [foo_tumor_1-foo_tumorPE]
+     adapter: AGATCGGAAGAGCACACGTCTGAACTCCAGTCACATGAGCATCTCGTATGCCGTCTTCTGCTTG
+     adapter2: AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT
+     bwa_output: foo_tumor.bam
