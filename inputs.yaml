@@ -38,11 +38,6 @@ target_bed:
      path: /path/to/optional/bed.file
      secondaryFiles:
         - {class: File, path: /path/to/optional/bed.file.tbi}
-targets_bed:
-     class: File
-     path: /path/to/optional/file.bed.gz
-     secondaryFiles:
-        - {class: File, path: /path/to/optional/file.bed.gz.tbi}
 targets_list: {class: File, path: /path/to/optional/targets.interval_list.file}
 tumor_sample:
      CN: MSKCC
